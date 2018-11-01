@@ -12,26 +12,44 @@ const PORT = process.env.PORT||3000;
 
 app.use(cors())
 
+app.get('/location',(request, response) => {
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyAW1TEC4aep3rrsRW9Z8EYiYNOC8d387v0&address=7600+wisconsin+ave+Bethesda+MD`
+    superagent.get(url)
+        .then(res => response.send(res.body))
+})
+
+
 // app.get('/location',(request, response) => {
 //     const url = `https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyAW1TEC4aep3rrsRW9Z8EYiYNOC8d387v0&address=7600+wisconsin+ave+Bethesda+MD`
+//     superagent.get(url)
+//         .then(res => response.send({
+//             latitude: res.body.results[0].geometry.location.lat,
+//             longitude: res.body.results[0].geometry.location.lng
+//         }))
+//     .catch(err => response.send('<img src="http://http.cat/404" />'))
+    
+// })
+
+// app.get('/weather',(request, response) => {
+//     const url = `https://api.darksky.net/forecast/6852ea92d3dacece95b7c3ba1d4c2d57/37.8267,-122.4233`
 //     superagent.get(url)
 //         .then(res => response.send(res.body))
 // })
 
 
-app.get('/location',(request, response) => {
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyAW1TEC4aep3rrsRW9Z8EYiYNOC8d387v0&address=7600+wisconsin+ave+Bethesda+MD`
+app.get('/weather',(request, response) => {
+    const url = `https://api.darksky.net/forecast/6852ea92d3dacece95b7c3ba1d4c2d57/37.8267,-122.4233`
     superagent.get(url)
         .then(res => response.send({
-            latitude: res.body.results[0].geometry.location.lat,
-            longitude: res.body.results[0].geometry.location.lng
+             forcast: res.body.currently.summary,
+             temperature: res.body.currently.temperature,
+             date: res.body.currently.time
+
         }))
-    .catch(err => response.send('<img src="http://http.cat/404" />'))
-    
 })
 
 app.get(`*`, (request,response) => {
-    response.send(`500 ERRRROR!!!!!!`);
+    response.send(`<img src="http://http.cat/500" />`);
 })
 
 app.listen(PORT, () => {
